@@ -1,0 +1,135 @@
+1) github da yangi repository :
+
+cmd da:
+
+git init 
+
+
+git add .
+
+git commit -m 'Azizbek'
+
+git config --global user.email 'azizbekgulomov'
+
+git config --global user.name 'Azizbek'
+
+git branch -M main
+
+git remote add origin https://github.com/AzizbekGulomov2002/cafe_api.git
+
+git push origin main
+
+
+2) pythonanywhere ga kirish :
+
+login (Azizbekgulomov2002@gmail.com)
+parol azizbek1529
+
+console + web + files ni alohida sahifada ochib qo`yish
+
+3) Web :
+
+yangi web ochish
+
+4) console :
+
+bash:
+
+git init 
+
+git remote add origin 'https://github.com/AzizbekGulomov2002/cafe_api.git'
+
+git pull origin main
+
+
+mkvirtualenv --python=/usr/bin/python3.9 env
+
+
+5) proyekt cmd da:
+
+
+pip freeze > Azizbek.txt
+
+git add .
+
+git commit -m 'azizbek'
+
+git push -u origin main
+
+
+6) sayt bashga :
+
+git pull origin main
+
+pip install -r Azizbek.txt
+
+
+
+7) saytning web bo`limiga Files bo`limidagi manzilni ko`chirish :
+
+
+Source code:
+
+/home/djangorestuz
+
+
+WSGI ichidagilarni o`chirib tashlab :
+
+
+# +++++++++++ DJANGO +++++++++++
+# To use your own Django app use code like this:
+import os
+import sys
+
+# assuming your Django settings file is at '/home/myusername/mysite/mysite/settings.py'
+path = '/home/djangorestuz/'
+if path not in sys.path:
+    sys.path.insert(0, path)
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'project.settings'
+
+## Uncomment the lines below depending on your Django version
+###### then, for Django >=1.5:
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+###### or, for older Django <=1.4
+#import django.core.handlers.wsgi
+#application = django.core.handlers.wsgi.WSGIHandler()
+
+
+
+
+8) filesda + virtualnv + env manzilini copy:
+
+/home/djangorestuz/.virtualenvs/env
+
+
+9) web dan asosiy oynaga o`tib :
+
+virtual enviroment bo`limiga (faylda turgan) manzilni tashlash;
+
+
+10) url degan bo`limga o`tib birinchisiga :
+
+/static 
+
+va filesdan static fayl manzilini copy :(agar yo'q bo'lsa loyiha cmd ga "py manage.py collectstatic")
+
+/home/djangorestuz/static
+
+!!media fayllarni ham huddi shunday tashlash!!!
+
+
+FORCE HTTPS ni ENABLED qilish
+
+
+11) files dan + project + settings.py ga kirib 
+
+DEBUG = False
+
+12) bashga o`tib :
+
+python3 manage.py migrate
+
+(xatolik bersa, kerakli kutubxonalarni import qilish)	
+

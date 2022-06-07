@@ -1,0 +1,188 @@
+1) django-admin startproject project .
+
+2) py manage.py startapp app
+
+3) (sumkacha hosil qilish uchun)
+   python -m venv env
+
+4) gitignore hosil qilish (git ignore bu - loyihadagi ayrim keraksiz kutubxonalarni ignor qilish va keraklisini olib qolish uchun)
+
+ushbu saytdan olish ->  (https://github.com/jpadilla/django-project-template/blob/master/.gitignore)
+
+5) projectda .gitignore fayl ochib kodni tashlash va db sqlite va build ni o`chirish
+
+6) cmd da :
+
+
+Cd env/Scripts
+activate
+cd .. (2x)
+
+	
+pip install pillow
+pip install django-jazzmin
+pip install djangorestframework
+pip install requests
+pip install django-cors-headers
+
+7) settings.py:
+
+
+DEBUG = False
+(False - xatolar ko'rinmaydi)
+Allowed Hosts ["*"]
+
+
+'jazzimin',
+'app.apps.AppConfig',
+'rest_framework',
+"corsheaders",
+
+
+MiddleWear ga (saytdan foydalanib ->  https://pypi.org/project/django-cors-headers/):
+
+"corsheaders.middleware.CorsMiddleware", tashlash;
+
+59-qatordan :
+
+CORS_ORIGIN__ALLOW_ALL = True
+
+(til va vaqtlarni o`zgartirish)
+
+
+oxirgi qatordan :
+
+
+	
+import os
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+
+
+8) project/urls :
+
+
+from django.conf import settings
+from django.conf.urls.static import static
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('app.urls'))
+]
+urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
+
+
+
+9) models.py:
+
+
+class Menu(models.Model):
+    nomi = models.CharField(max_length=100,help_text='Menyu nomini kiriting...')
+    def __str__(self):
+        return self.nomi
+
+    
+    
+
+    class Meta:
+        verbose_name = 'Menyu '
+        verbose_name_plural = 'Menyular '
+        
+
+
+class Mahsulot(models.Model):
+    menu = models.ForeignKey(Menu,on_delete=models.CASCADE,help_text='Mahsulot turini tanlang')
+    nomi = models.CharField(max_length=200,help_text='Mahsulot nomini kiriting...')
+    mahsulot_haqida = models.TextField(help_text='Mahsulot haqida ma`lumot')
+    rasm = models.ImageField(upload_to='mahsulotlar')
+    narx = models.IntegerField(help_text='Mahsulot narxini kiriting')
+    
+    def __str__(self):
+        return self.nomi
+    class Meta:
+        verbose_name = 'Mahsulot '
+        verbose_name_plural = 'Mahsulotlar'
+
+
+10) admin.py:
+
+
+
+from .models import Menu, Mahsulot
+@admin.register(Menu)
+class MenuAdmin(admin.ModelAdmin):
+    search_fields = ['nomi']
+    list_display = ['nomi']
+    
+@admin.register(Mahsulot)
+class MahsulotAdmin(admin.ModelAdmin):
+    search_fields = ['nomi','menu','mahsulot_haqida','narx']
+    list_display = ['nomi','menu','mahsulot_haqida','narx']
+
+
+11) app + serializers.py:
+(model ko'rinishidagi malumotlarni json formatga o'girish)
+
+
+from rest_framework import serializers
+from .models import Menu, Mahsulot
+class MenuSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Menu
+        fields = '__all__'
+        
+class MahsulotSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Mahsulot
+        fields = '__all__'
+
+
+
+12) views.py:
+
+
+
+
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import Menu,Mahsulot
+from serializers import MahsulotSerializers, MenuSerializers
+class AllMenu(APIView):
+    def get(self,request):
+        all = Menu.objects.all()
+        serializer = MenuSerializers(all,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+        
+class AllMahsulot(APIView):
+    def get(self,request):
+        all = Mahsulot.objects.all()
+        serializer = MahsulotSerializers(all,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+13) app + urls.py:
+
+
+
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    path('allmenu',AllMenu.as_view()),
+    path('all',AllMahsulot.as_view())
+    ]
+
+
+14) database activate: cmd
+
+py manage.py makemigrations
+py manage.pymigrate
+py manage.py createsuperuser
+py manage.py collectstatic (collectstatic - barcha static fayllarni birlashtirib tartiblaydi)
+py manage.py runserver
+
+
+
+!!!Admin panel ochishi xunuk bo`lganda :  DEBUG = False qilinadi !!!!
